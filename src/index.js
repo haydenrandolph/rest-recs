@@ -52,13 +52,28 @@ const restaurants = [
     vegetarian: "no",
     doesDeliveries: "no"
 },
+{
+    name: "The Always Open Diner",
+    style: "Diner",
+    address: "Endless Highway 1, Anytown",
+    openHour: "00:00", 
+    closeHour: "23:59", 
+    vegetarian: "yes", 
+    doesDeliveries: "yes" 
+},
 ];
 
 // check if restaurant is open
 function isOpen(restaurant) {
   const currentTime = new Date();
   const openTime = new Date(currentTime.toDateString() + ' ' + restaurant.openHour);
-  const closeTime = new Date(currentTime.toDateString() + ' ' + restaurant.closeHour);
+  let closeTime = new Date(currentTime.toDateString() + ' ' + restaurant.closeHour);
+
+  // Adjust for closing time at or after midnight
+  if (restaurant.closeHour === '23:59' || restaurant.closeHour === '24:00') {
+    closeTime = new Date(closeTime.getTime() + 60 * 1000); 
+  }
+
   return currentTime >= openTime && currentTime <= closeTime;
 }
 
