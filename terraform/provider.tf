@@ -13,5 +13,4 @@ terraform {
 provider "google" {
   project = var.project_id
   region  = var.region
-  # Add your authentication details here, or use environment variables
 }

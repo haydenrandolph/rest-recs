@@ -1,7 +1,7 @@
 # main.tf
 resource "google_cloudfunctions_function" "docker_function" {
   name        = "rest-rec-function"
-  description = "My Dockerized Cloud Function"
+  description = "Service to recommend restaurants"
   runtime     = "nodejs14"
 
   available_memory_mb = 256
