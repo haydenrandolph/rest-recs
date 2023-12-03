@@ -1,4 +1,3 @@
-# main.tf
 resource "google_cloudfunctions_function" "docker_function" {
   name        = "rest-rec-function"
   description = "Service to recommend restaurants"
@@ -6,13 +5,11 @@ resource "google_cloudfunctions_function" "docker_function" {
 
   available_memory_mb = 256
   entry_point         = "app"
-
   labels = {
     deployment-tool = "terraform"
   }
-
-  environment_variables = {
-    DOCKER_IMAGE_URL = var.docker_image_url
+  source_repository {
+    url = var.docker_image_url
   }
 
   trigger_http = true
