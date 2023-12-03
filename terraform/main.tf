@@ -1,27 +1,36 @@
-resource "google_cloudfunctions_function" "docker_function" {
-  name        = "rest-rec-function"
-  description = "Service to recommend restaurants"
-  runtime     = "nodejs14"
-
-  available_memory_mb = 256
-  entry_point         = "app"
-  labels = {
-    deployment-tool = "terraform"
+# Cloud Run Service - provisions service that runs container
+resource "google_cloud_run_service" "api_service" {
+  name     = "rest-rec-service"
+  location = var.region
+  template {
+    spec {
+      containers {
+        image = var.docker_image_url
+      }
+    }
   }
-  source_repository {
-    url = var.docker_image_url
+  traffic {
+    percent         = 100
+    latest_revision = true
   }
-
-  trigger_http = true
 }
 
-resource "google_cloudfunctions_function_iam_binding" "function_invoker" {
-  project        = var.project_id
-  region         = var.region
-  cloud_function = google_cloudfunctions_function.docker_function.name
+# allow unauthenticated invocations
+resource "google_cloud_run_service_iam_policy" "api_service_policy" {
+  location    = google_cloud_run_service.api_service.location
+  project     = var.project_id
+  service     = google_cloud_run_service.api_service.name
 
-  role    = "roles/cloudfunctions.invoker"
-  members = ["allUsers"]
+  policy_data = <<EOF
+  {
+    "bindings": [{
+      "role": "roles/run.invoker",
+      "members": [
+        "allUsers"
+      ]
+    }]
+  }
+  EOF
 }
 
 //bucket to capture logs
