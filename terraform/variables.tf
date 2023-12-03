@@ -2,12 +2,13 @@
 variable "project_id" {
   description = "The ID of the Google Cloud project"
   type        = string
+  default     = "varonis-407001"
 }
 
 variable "region" {
   description = "The region where Google Cloud resources will be created"
   type        = string
-  default     = "us-central1"
+  default     = "us-east1"
 }
 
 variable "docker_image_url" {
