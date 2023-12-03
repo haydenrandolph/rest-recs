@@ -1,3 +1,18 @@
+//service account for cloud run
+resource "google_service_account" "cloud_run_service_account" {
+  account_id   = "rest-rec-service-account"
+  display_name = "Cloud Run Service Account"
+}
+
+resource "google_project_iam_binding" "run_invoker" {
+  project = var.project_id
+  role    = "roles/run.invoker"
+
+  members = [
+    "serviceAccount:${google_service_account.cloud_run_service_account.email}",
+  ]
+}
+
 # Cloud Run Service - provisions service that runs container
 resource "google_cloud_run_service" "api_service" {
   name     = "rest-rec-service"
@@ -7,7 +22,7 @@ resource "google_cloud_run_service" "api_service" {
       containers {
         image = var.docker_image_url
       }
-      service_account_name = "rest-rec-service-account@my-project-id.iam.gserviceaccount.com"
+      service_account_name = google_service_account.cloud_run_service_account.email
     }
   }
   traffic {
