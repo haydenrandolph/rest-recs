@@ -31,3 +31,4 @@ jobs:
           file: ./src/Dockerfile
           push: true
           tags: hankcmoody/varonis-rest-rec:${{ github.sha }}
+          #trigger entire workflow
