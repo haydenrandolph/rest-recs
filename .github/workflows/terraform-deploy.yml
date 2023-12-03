@@ -18,12 +18,14 @@ jobs:
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1
 
-      - name: Terraform Init
-        run: terraform init
+    - name: Terraform Init
+      run: terraform init
+      working-directory: ./terraform
 
-      - name: Terraform Apply
-        run: terraform apply -auto-approve
-        env:
-          TF_VAR_gcp_project_id: ${{ secrets.GCP_PROJECT_ID }}
-          TF_VAR_docker_image_url: "ghcr.io/${{ github.repository }}/myapp:latest"
-          GOOGLE_CREDENTIALS: ${{ secrets.GCP_SA_KEY }}
+    - name: Terraform Apply
+      run: terraform apply -auto-approve
+      env:
+        TF_VAR_gcp_project_id: ${{ secrets.GCP_PROJECT_ID }}
+        TF_VAR_docker_image_url: "ghcr.io/${{ github.repository }}/myapp:latest"
+        GOOGLE_APPLICATION_CREDENTIALS: ${{ github.workspace }}/gcp-credentials.json
+      working-directory: ./terraform
