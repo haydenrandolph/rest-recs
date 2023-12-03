@@ -1,6 +1,13 @@
-# provider.tf
 terraform {
   required_version = ">= 0.14"
+
+  cloud {
+    organization = "haydenrandolph1"
+
+    workspaces {
+      name = "rest-recs"
+    }
+  }
 
   required_providers {
     google = {
