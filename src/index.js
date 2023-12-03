@@ -12,7 +12,7 @@ const restaurants = [
     style: 'Italian',
     address: 'Wherever Street 99, Somewhere',
     openHour: '09:00',
-    closeHour: '23:00',
+    closeHour: '23:59',
     vegetarian: 'yes',
     doesDeliveries: "yes"
 },
