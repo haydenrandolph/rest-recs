@@ -1,5 +1,9 @@
 const express = require('express');
+const {Logging} = require('@google-cloud/logging');
+
 const app = express();
+const logging = new Logging();
+const log = logging.log('restaurant-recommendation-logs');
 
 // setting restaurants array
 const restaurants = [
@@ -59,20 +63,31 @@ function isOpen(restaurant) {
 }
 
 // get restaurant rec - optional params. allows users to have optionality. 
-app.get('/getRestaurant', (req, res) => {
+app.get('/getRestaurant', async (req, res) => {
   const { style, vegetarian, doesDeliveries } = req.query;
 
+  const requestEntry = log.entry({ httpRequest: req }, { 
+    message: `Received request for style: ${style}, vegetarian: ${vegetarian}, doesDeliveries: ${doesDeliveries}` 
+  });
+  await log.write(requestEntry);
   const recommendation = restaurants.find(restaurant => 
     (style ? restaurant.style === style : true) &&
     (vegetarian ? restaurant.vegetarian === vegetarian : true) &&
     (doesDeliveries ? restaurant.doesDeliveries === doesDeliveries : true) &&
     isOpen(restaurant)
   );
-
   if (recommendation) {
     res.json({ restaurantRecommendation: recommendation });
+    const responseEntry = log.entry({ httpRequest: req }, { 
+      message: `Responded with restaurant: ${recommendation.name}` 
+    });
+    await log.write(responseEntry);
   } else {
     res.status(404).json({ error: 'No matching restaurant found or it is currently closed.' });
+    const notFoundEntry = log.entry({ httpRequest: req }, { 
+      message: 'No matching restaurant found or it is currently closed.' 
+    });
+    await log.write(notFoundEntry);
   }
 });
 
