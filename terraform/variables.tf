@@ -14,6 +14,7 @@ variable "region" {
 variable "docker_image_url" {
   description = "URL of the Docker image in the container registry"
   type        = string
+  //default     = "hankcmoody/varonis-rest-rec:latest"
 }
 
 resource "random_id" "bucket_suffix" {
