@@ -5,7 +5,7 @@ const app = express();
 const logging = new Logging();
 const log = logging.log('restaurant-recommendation-logs');
 
-// setting restaurants array - trigger on dev change to app, deploy entire stack
+// setting restaurants array - trigger
 const restaurants = [
 {
     name: 'Pizza Hut',
