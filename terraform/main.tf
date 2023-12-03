@@ -1,8 +1,3 @@
-resource "random_id" "service_suffix" {
-  byte_length = 2
-}
-
-
 # Cloud Run Service - provisions service that runs container
 resource "google_cloud_run_service" "api_service" {
   name     = "rest-rec-service"
@@ -12,6 +7,7 @@ resource "google_cloud_run_service" "api_service" {
       containers {
         image = var.docker_image_url
       }
+      service_account_name = "rest-rec-service-account@my-project-id.iam.gserviceaccount.com"
     }
   }
   traffic {
