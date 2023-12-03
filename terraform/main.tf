@@ -1,3 +1,8 @@
+resource "random_id" "service_suffix" {
+  byte_length = 2
+}
+
+
 # Cloud Run Service - provisions service that runs container
 resource "google_cloud_run_service" "api_service" {
   name     = "rest-rec-service-${random_id.service_suffix.hex}"
@@ -13,11 +18,6 @@ resource "google_cloud_run_service" "api_service" {
     percent         = 100
     latest_revision = true
   }
-}
-
-# avoids naming collisions
-resource "random_id" "service_suffix" {
-  byte_length = 4 
 }
 
 # Allow unauthenticated invocations
@@ -40,6 +40,6 @@ resource "google_cloud_run_service_iam_policy" "api_service_policy" {
 
 # Bucket to capture logs
 resource "google_storage_bucket" "log_bucket" {
-  name     = "rest-rec-logs-${random_id.bucket_suffix.hex}"
+  name     = "rest-rec-logs-${random_id.service_suffix.hex}"
   location = var.region
 }

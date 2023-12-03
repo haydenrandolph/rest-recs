@@ -16,4 +16,3 @@ variable "docker_image_url" {
   type        = string
   //default     = "hankcmoody/varonis-rest-rec:latest"
 }
-
