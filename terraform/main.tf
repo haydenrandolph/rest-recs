@@ -1,6 +1,6 @@
 # Cloud Run Service - provisions service that runs container
 resource "google_cloud_run_service" "api_service" {
-  name     = "rest-rec-service"
+  name     = "rest-rec-service-${random_id.service_suffix.hex}"
   location = var.region
   template {
     spec {
@@ -13,6 +13,11 @@ resource "google_cloud_run_service" "api_service" {
     percent         = 100
     latest_revision = true
   }
+}
+
+# avoids naming collisions
+resource "random_id" "service_suffix" {
+  byte_length = 4 
 }
 
 # Allow unauthenticated invocations

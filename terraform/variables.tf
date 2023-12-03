@@ -17,6 +17,3 @@ variable "docker_image_url" {
   //default     = "hankcmoody/varonis-rest-rec:latest"
 }
 
-resource "random_id" "bucket_suffix" {
-  byte_length = 2
-}
