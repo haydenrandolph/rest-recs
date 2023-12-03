@@ -1,0 +1,32 @@
+name: Destroy with Terraform
+
+on: [workflow_dispatch]
+
+jobs:
+  terraform-destroy:
+    runs-on: ubuntu-latest
+    environment: production
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Decode GCP Credentials
+        run: echo "${{ secrets.GCP_SA_KEY }}" | base64 --decode > gcp-credentials.json
+        shell: bash
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1
+        with:
+          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+
+      - name: Terraform Init
+        run: terraform init
+        working-directory: ./terraform
+
+      - name: Terraform Destroy
+        run: terraform destroy -auto-approve
+        env:
+          TF_VAR_gcp_project_id: ${{ secrets.GCP_PROJECT_ID }}
+          GOOGLE_APPLICATION_CREDENTIALS: ${{ github.workspace }}/gcp-credentials.json
+        working-directory: ./terraform
