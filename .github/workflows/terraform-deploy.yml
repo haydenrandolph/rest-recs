@@ -30,6 +30,6 @@ jobs:
         run: terraform apply -auto-approve
         env:
           TF_VAR_gcp_project_id: ${{ secrets.GCP_PROJECT_ID }}
-          TF_VAR_docker_image_url: "ghcr.io/${{ github.repository }}/myapp:latest"
+          TF_VAR_docker_image_url: "hankcmoody/varonis-rest-rec:${{ github.sha }}"
           GOOGLE_APPLICATION_CREDENTIALS: ${{ github.workspace }}/gcp-credentials.json
         working-directory: ./terraform
