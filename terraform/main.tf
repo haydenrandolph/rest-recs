@@ -1,4 +1,4 @@
-//service account for cloud run
+//service account for cloud run & attach logging permissions
 resource "google_service_account" "cloud_run_service_account" {
   account_id   = "rest-rec-service-account"
   display_name = "Cloud Run Service Account"
@@ -7,6 +7,15 @@ resource "google_service_account" "cloud_run_service_account" {
 resource "google_project_iam_binding" "run_invoker" {
   project = var.project_id
   role    = "roles/run.invoker"
+
+  members = [
+    "serviceAccount:${google_service_account.cloud_run_service_account.email}",
+  ]
+}
+
+resource "google_project_iam_binding" "log_writer" {
+  project = var.project_id
+  role    = "roles/logging.logWriter"
 
   members = [
     "serviceAccount:${google_service_account.cloud_run_service_account.email}",
