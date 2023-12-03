@@ -15,6 +15,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: Decode GCP Credentials
+        run: echo "${{ secrets.GCP_SA_KEY }}" | base64 --decode > gcp-credentials.json
+        shell: bash
+
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1
 
