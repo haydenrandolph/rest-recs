@@ -11,7 +11,7 @@ const restaurants = [
     name: 'Pizza Hut',
     style: 'Italian',
     address: 'Wherever Street 99, Somewhere',
-    openHour: '09:00',
+    openHour: '01:00',
     closeHour: '23:59',
     vegetarian: 'yes',
     doesDeliveries: "yes"
@@ -19,7 +19,7 @@ const restaurants = [
 {
     name: "Burgers & Fries",
     style: "American",
-    address: "123 Pasta Lane, Rome City",
+    address: "123 4th of July",
     openHour: "10:00",
     closeHour: "22:00",
     vegetarian: "yes",
@@ -56,7 +56,7 @@ const restaurants = [
     name: "The Always Open Diner",
     style: "Diner",
     address: "Endless Highway 1, Anytown",
-    openHour: "00:00", 
+    openHour: "00:01", 
     closeHour: "23:59", 
     vegetarian: "yes", 
     doesDeliveries: "yes" 
@@ -68,12 +68,6 @@ function isOpen(restaurant) {
   const currentTime = new Date();
   const openTime = new Date(currentTime.toDateString() + ' ' + restaurant.openHour);
   let closeTime = new Date(currentTime.toDateString() + ' ' + restaurant.closeHour);
-
-  // Adjust for closing time at or after midnight
-  if (restaurant.closeHour === '23:59' || restaurant.closeHour === '24:00') {
-    closeTime = new Date(closeTime.getTime() + 60 * 1000); 
-  }
-
   return currentTime >= openTime && currentTime <= closeTime;
 }
 
